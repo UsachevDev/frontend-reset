@@ -1,25 +1,17 @@
-# .github/workflows/ci.yml
 name: CI
 on: [push, pull_request]
-
 jobs:
-  test:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # 1️⃣ pnpm CLI
       - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
-      # 2️⃣ Node + кэш pnpm-store
+        with: { version: 9 }
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm       # <--
-
-      # 3️⃣ команды
+          cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
-      - run: pnpm test --if-present
+      - run: pnpm test
+      - run: pnpm build
